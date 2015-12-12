@@ -1,27 +1,28 @@
 #include <iostream>
+#include <memory>
 #include <SFML/Graphics.hpp>
 #include "kangaru.h"
 
+#include "src/window/WindowManager.h"
+
 using namespace kgr;
+using namespace std;
 
 int main(int argc, char **argv) {
 	Container container;
-    sf::RenderWindow window(sf::VideoMode(200, 200), "Bomberman");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
-
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
+	
+	auto manager = make_shared<WindowManager>();
+	
+	auto shape = make_shared<sf::CircleShape>(100.f);
+    shape->setFillColor(sf::Color::Green);
+	
+	auto shape2 = make_shared<sf::CircleShape>(50.f);
+    shape2->setFillColor(sf::Color::Red);
+	
+	manager->addDrawable(shape);
+	manager->addDrawable(shape2);
+	
+	manager->run();
 
     return 0;
 }
