@@ -4,7 +4,7 @@ using namespace kgr;
 using sf::Drawable;
 using namespace std;
 
-WindowManager::WindowManager(View& view) : window{sf::VideoMode{800, 600}, "Bomberman"}, view{view} {}
+WindowManager::WindowManager(View& view, EventManager& eventManager) : window{sf::VideoMode{800, 600}, "Bomberman"}, view{view}, eventManager{eventManager} {}
 
 void WindowManager::run()
 {
@@ -15,6 +15,8 @@ void WindowManager::run()
         {
             if (event.type == sf::Event::Closed)
                 window.close();
+			else
+				eventManager.dispatch(event);
         }
 
         window.clear();

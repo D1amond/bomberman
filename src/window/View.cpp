@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector<shared_ptr<sf::Drawable>> View::getDrawables()
+const vector<shared_ptr<sf::Drawable>>& View::getDrawables()
 {
 	return drawables;
 }

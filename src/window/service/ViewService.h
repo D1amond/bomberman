@@ -1,4 +1,6 @@
-#include "kangaru/kangaru.hpp"
+#pragma once
+
+#include "kangaru.h"
 
 #include "../View.h"
 

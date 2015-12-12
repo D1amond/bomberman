@@ -7,7 +7,7 @@
 struct View
 {
 	void addDrawable(std::shared_ptr<sf::Drawable> drawable);
-	std::vector<std::shared_ptr<sf::Drawable>> getDrawables();
+	const std::vector< std::shared_ptr< sf::Drawable > >& getDrawables();
 private:
 	std::vector<std::shared_ptr<sf::Drawable>> drawables;
 };

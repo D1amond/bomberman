@@ -10,6 +10,6 @@ add_executable(bomberman ${SRC_FILES} main.cpp)
 find_package(SFML 2 REQUIRED system window graphics network audio)
 target_link_libraries(bomberman ${SFML_LIBRARIES})
 
-include_directories("include/")
+include_directories("include/" "./")
 
 install(TARGETS bomberman RUNTIME DESTINATION bin)
