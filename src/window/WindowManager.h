@@ -4,12 +4,13 @@
 #include "SFML/Graphics.hpp"
 #include <memory>
 
+#include "View.h"
+
 struct WindowManager
 {
-	WindowManager();
+	WindowManager(View& view);
 	void run();
-	void addDrawable(std::shared_ptr<sf::Drawable> drawable);
 private:
-	std::vector<std::shared_ptr<sf::Drawable>> drawables;
 	sf::RenderWindow window;
+	View& view;
 };

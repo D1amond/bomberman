@@ -4,6 +4,7 @@
 #include "kangaru.h"
 
 #include "src/window/WindowManager.h"
+#include "src/window/service/ViewService.h"
 
 using namespace kgr;
 using namespace std;
@@ -11,7 +12,8 @@ using namespace std;
 int main(int argc, char **argv) {
 	Container container;
 	
-	auto manager = make_shared<WindowManager>();
+	auto& view = container.service<ViewService>();
+	auto manager = make_shared<WindowManager>(view);
 	
 	auto shape = make_shared<sf::CircleShape>(100.f);
     shape->setFillColor(sf::Color::Green);
@@ -19,8 +21,8 @@ int main(int argc, char **argv) {
 	auto shape2 = make_shared<sf::CircleShape>(50.f);
     shape2->setFillColor(sf::Color::Red);
 	
-	manager->addDrawable(shape);
-	manager->addDrawable(shape2);
+	view.addDrawable(shape);
+	view.addDrawable(shape2);
 	
 	manager->run();
 

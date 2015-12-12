@@ -1,10 +1,10 @@
 #include "WindowManager.h"
 
 using namespace kgr;
-using namespace sf;
+using sf::Drawable;
 using namespace std;
 
-WindowManager::WindowManager() : window{sf::VideoMode{800, 600}, "Bomberman"} {}
+WindowManager::WindowManager(View& view) : window{sf::VideoMode{800, 600}, "Bomberman"}, view{view} {}
 
 void WindowManager::run()
 {
@@ -19,15 +19,10 @@ void WindowManager::run()
 
         window.clear();
 		
-		for (shared_ptr<Drawable> drawable : drawables) {
-			window.draw(*drawable.get());
+		for (shared_ptr<Drawable> drawable : view.getDrawables()) {
+			window.draw(*drawable);
 		}
 		
         window.display();
     }
-}
-
-void WindowManager::addDrawable(shared_ptr<Drawable> drawable)
-{
-	drawables.push_back(drawable);
 }
