@@ -9,10 +9,11 @@
 
 struct WindowManager
 {
-	WindowManager(View& view, EventManager& eventManager);
+	WindowManager(View& view, EventManager& eventManager, LevelManager& levelManager);
 	void run();
 private:
 	sf::RenderWindow window;
 	View& view;
 	EventManager& eventManager;
+	LevelManager& levelManager;
 };

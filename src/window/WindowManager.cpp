@@ -1,10 +1,21 @@
 #include "WindowManager.h"
+#include <src/level/Level.h>
+
+#include <iostream>
 
 using namespace kgr;
 using sf::Drawable;
 using namespace std;
 
-WindowManager::WindowManager(View& view, EventManager& eventManager) : window{sf::VideoMode{800, 600}, "Bomberman"}, view{view}, eventManager{eventManager} {}
+WindowManager::WindowManager(
+	View& view,
+	EventManager& eventManager,
+	LevelManager& levelManager
+) : window{
+	sf::VideoMode{480, 480}, "Bomberman"},
+	view{view},
+	eventManager{eventManager},
+	levelManager{levelManager} {}
 
 void WindowManager::run()
 {
@@ -20,6 +31,14 @@ void WindowManager::run()
         }
 
         window.clear();
+
+		if (levelManager.hasLevel()) {
+			for (auto layer : levelManager.getCurrentLevel().getLayers()) {
+				for (shared_ptr<Drawable> drawable : layer.second.getTiles()) {
+					window.draw(*drawable);
+				}
+			}
+		}
 		
 		for (shared_ptr<Drawable> drawable : view.getDrawables()) {
 			window.draw(*drawable);

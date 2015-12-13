@@ -1,6 +1,9 @@
 #include "View.h"
+#include <src/level/Level.h>
 
 using namespace std;
+
+View::View() {}
 
 const vector<shared_ptr<sf::Drawable>>& View::getDrawables()
 {
