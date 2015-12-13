@@ -8,5 +8,5 @@ struct TextureManager
 {
 	sf::Texture get(std::string path);
 private:
-	std::map<std::string, sf::Texture>;
+	std::map<std::string, sf::Texture> textures;
 };

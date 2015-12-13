@@ -10,12 +10,14 @@ using namespace std;
 WindowManager::WindowManager(
 	View& view,
 	EventManager& eventManager,
-	LevelManager& levelManager
+	LevelManager& levelManager,
+	std::weak_ptr<HeroManager> heroManager
 ) : window{
 	sf::VideoMode{480, 480}, "Bomberman"},
 	view{view},
 	eventManager{eventManager},
-	levelManager{levelManager} {}
+	levelManager{levelManager},
+	heroManager{heroManager} {}
 
 void WindowManager::run()
 {
@@ -38,6 +40,10 @@ void WindowManager::run()
 					window.draw(*drawable);
 				}
 			}
+		}
+		
+		if (!heroManager.expired()) {
+			window.draw(heroManager.lock()->getSprite());
 		}
 		
 		for (shared_ptr<Drawable> drawable : view.getDrawables()) {

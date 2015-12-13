@@ -7,6 +7,7 @@
 #include "src/window/service/ViewService.h"
 #include "src/event/service/EventManagerService.h"
 #include "src/level/service/LevelManagerService.h"
+#include "src/entity/service/HeroManagerService.h"
 #include "src/level/Level.h"
 
 using namespace kgr;
@@ -17,7 +18,7 @@ int main(int argc, char **argv) {
 	
 	auto& view = container.service<ViewService>();
 	auto& levelManager = container.service<LevelManagerService>();
-	auto manager = make_shared<WindowManager>(view, container.service<EventManagerService>(), levelManager);
+	auto manager = make_shared<WindowManager>(view, container.service<EventManagerService>(), levelManager, container.service<HeroManagerService>());
 	
 	levelManager.goTo("level1");
 	

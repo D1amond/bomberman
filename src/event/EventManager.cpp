@@ -11,9 +11,10 @@ void EventManager::subscribe(Event::EventType type, shared_ptr<EventListener> li
 	listeners.emplace(type, listener);
 }
 
-void EventManager::init(shared_ptr<KeyboardListener> keyboardListener)
+void EventManager::init(shared_ptr<KeyboardListener> keyboardListener, std::shared_ptr<HeroManager> heroManager)
 {
 	subscribe(sf::Event::KeyReleased, keyboardListener);
+	subscribe(sf::Event::KeyPressed, heroManager);
 }
 
 
