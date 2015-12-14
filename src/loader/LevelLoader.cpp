@@ -23,7 +23,7 @@ unique_ptr<Level> LevelLoader::load(string name)
 				auto sprite = make_shared<sf::Sprite>();
 				sprite->setTexture(tileset);
 				
-				if (i==0 || i==14 || j==0 || j==14) {
+				if (i==0 || i==14 || j==0 || j==14 || (i%2 == 0 && j%2 == 0)) {
 					_collisionManager.addTile({{i*32.f, j*32.f}, 32, 32});
 					sprite->setTextureRect(sf::IntRect(32, 0, 32, 32));
 				} else

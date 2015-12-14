@@ -1,7 +1,9 @@
 #include "Square.h"
 
+#include <iostream>
 #include <cmath>
 
+using namespace std;
 using namespace sf;
 
 Square::Square(Vector2f position, float height, float length) : position{position}, height{height}, length{length} {}
@@ -13,6 +15,8 @@ bool Square::collides(Square& square)
 	float totalYA = square.getPosition().y + square.getHeight();
 	float totalXB = position.x + length;
 	float totalYB = position.y + height;
+	
+	cout << abs(totalXB-totalXA) << " <= " << square.getLength() << endl;
 	
 	if (abs(totalXB-totalXA) <= (square.getLength())) {
 		collides = true;

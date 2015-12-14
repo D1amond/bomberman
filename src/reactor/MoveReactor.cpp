@@ -62,9 +62,13 @@ bool MoveReactor::tick()
 	auto diffX = position.x - entity.getSprite().getPosition().x;
 	auto diffY = position.y - entity.getSprite().getPosition().y;
 	Time elapsed = timer.getElapsedTime();
-	
+	/*
 	if (_collisionManager.collides(entity.getSquare())) {
 		cout << "COLLISION!!!" << endl;
+	}*/
+	
+	if (_collisionManager.hasTile(entity.getSprite().getPosition()+(32.f*direction.second))) {
+		return false;
 	}
 	
 	if (diffX != 0 || diffY != 0) {
