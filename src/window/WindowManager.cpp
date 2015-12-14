@@ -43,7 +43,9 @@ void WindowManager::run()
 		}
 		
 		if (!heroManager.expired()) {
-			window.draw(heroManager.lock()->getSprite());
+			auto lockedHeroManager = heroManager.lock();
+			lockedHeroManager->tick();
+			window.draw(lockedHeroManager->getSprite());
 		}
 		
 		for (shared_ptr<Drawable> drawable : view.getDrawables()) {
