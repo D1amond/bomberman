@@ -10,6 +10,8 @@ using namespace sf;
 
 LevelLoader::~LevelLoader() = default;
 
+LevelLoader::LevelLoader(CollisionManager& collisionManager) : _collisionManager(collisionManager) {}
+
 unique_ptr<Level> LevelLoader::load(string name)
 {
 	if (tileset.loadFromFile("res/texture/tile/tileset.png"))
@@ -21,11 +23,11 @@ unique_ptr<Level> LevelLoader::load(string name)
 				auto sprite = make_shared<sf::Sprite>();
 				sprite->setTexture(tileset);
 				
-				if (i==0 || i==14 || j==0 || j==14)
+				if (i==0 || i==14 || j==0 || j==14) {
+					_collisionManager.addTile({{i*32.f, j*32.f}, 32, 32});
 					sprite->setTextureRect(sf::IntRect(32, 0, 32, 32));
-				else
+				} else
 					sprite->setTextureRect(sf::IntRect(0, 0, 32, 32));
-				
 				
 				sprite->setPosition(sf::Vector2f(i*32, j*32));
 				

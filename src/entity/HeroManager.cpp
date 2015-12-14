@@ -1,30 +1,39 @@
 #include "HeroManager.h"
 
 #include <iostream>
-#include "../reactor/MoveReactor.h"
+#include "../reactor/service/MoveReactorService.h"
+#include "../collision/Square.h"
+#include "../collision/service/CollisionManagerService.h"
 
 using namespace std;
 using namespace sf;
 
-HeroManager::HeroManager() : charset{}, hero{} {}
+HeroManager::HeroManager(kgr::Container& container) : hero{}, _container{container} {}
 
 void HeroManager::init()
 {
 	if (charset.loadFromFile("res/texture/hero/hero.png")) {
+		sf::Sprite sprite;
 		sf::Vector2f position;
 		position.x = 32.f;
 		position.y = 32.f;
-		hero.setTexture(charset);
+		sprite.setTexture(charset);
 		
-		hero.setTextureRect(sf::IntRect(32, 0, 32, 32));
+		sprite.setTextureRect(sf::IntRect(32, 0, 32, 32));
 		
-		hero.setPosition(position);
+		sprite.setPosition(position);
+		
+		Square square{position, 32, 32};
+		
+		hero.setCharset(charset);
+		hero.setSprite(sprite);
+		hero.setSquare(square);
 	}
 }
 
 const Sprite& HeroManager::getSprite()
 {
-	return hero;
+	return hero.getSprite();
 }
 
 void HeroManager::tick()
@@ -56,8 +65,9 @@ void HeroManager::react(Event event)
 			if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A) {
 				destination.x = -1*movefactor;
 			}
-			destination += hero.getPosition();
-			reactor = unique_ptr<MoveReactor>{new MoveReactor(hero, destination)};
+			destination += hero.getSprite().getPosition();
+			reactor = unique_ptr<MoveReactor>{new MoveReactor(_container.service<CollisionManagerService>(), hero, destination)};
+			//reactor = _container.service<MoveReactorService>(hero, destination);
 		}
 	}
 }

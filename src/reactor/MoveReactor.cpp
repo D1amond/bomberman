@@ -3,11 +3,21 @@
 #include <iostream>
 
 using namespace std;
-using namespace sf;
+using sf::Vector2f;
+using sf::Time;
 
-MoveReactor::MoveReactor(Sprite& sprite, Vector2f position) : sprite{sprite}, position{position}, timer{}, direction{} {
-	auto diffX = position.x - sprite.getPosition().x;
-	auto diffY = position.y - sprite.getPosition().y;
+MoveReactor::MoveReactor(
+	CollisionManager& collisionManager,
+	Entity& entity,
+	Vector2f position
+) : entity{entity},
+	position{position},
+	timer{},
+	direction{},
+	_collisionManager{collisionManager}
+{
+	auto diffX = position.x - entity.getSprite().getPosition().x;
+	auto diffY = position.y - entity.getSprite().getPosition().y;
 	initialTime = timer.getElapsedTime();
 	lastTime = timer.getElapsedTime();
 	animationTime = timer.getElapsedTime();
@@ -36,33 +46,37 @@ MoveReactor::~MoveReactor() {}
 void MoveReactor::finalize()
 {
 	if (direction.first == "up") {
-		sprite.setTextureRect(sf::IntRect(32, 32, 32, 32));
+		entity.getSprite().setTextureRect(sf::IntRect(32, 32, 32, 32));
 	} else if (direction.first == "down") {
-		sprite.setTextureRect(sf::IntRect(32, 0, 32, 32));
+		entity.getSprite().setTextureRect(sf::IntRect(32, 0, 32, 32));
 	} else if (direction.first == "left") {
-		sprite.setTextureRect(sf::IntRect(32, 96, 32, 32));
+		entity.getSprite().setTextureRect(sf::IntRect(32, 96, 32, 32));
 	} else if (direction.first == "right") {
-		sprite.setTextureRect(sf::IntRect(32, 64, 32, 32));
+		entity.getSprite().setTextureRect(sf::IntRect(32, 64, 32, 32));
 	}
 	animationCounter = 0;
 }
 
 bool MoveReactor::tick()
 {
-	auto diffX = position.x - sprite.getPosition().x;
-	auto diffY = position.y - sprite.getPosition().y;
+	auto diffX = position.x - entity.getSprite().getPosition().x;
+	auto diffY = position.y - entity.getSprite().getPosition().y;
 	Time elapsed = timer.getElapsedTime();
+	
+	if (_collisionManager.collides(entity.getSquare())) {
+		cout << "COLLISION!!!" << endl;
+	}
 	
 	if (diffX != 0 || diffY != 0) {
 		if (((elapsed.asMilliseconds() - lastTime.asMilliseconds())/10)*10 == 10) {
 			animate(elapsed);
-			sprite.move(direction.second);
+			entity.getSprite().move(direction.second);
 			lastTime = elapsed;
 		}
 		
 		//fallback
 		if (elapsed.asSeconds() - initialTime.asSeconds() > 1.5) {
-			sprite.move(diffX, diffY);
+			entity.getSprite().move(diffX, diffY);
 		}
 		
 		return true;
@@ -76,35 +90,35 @@ void MoveReactor::animate(Time elapsed)
 	if (((elapsed.asMilliseconds() - animationTime.asMilliseconds())/10)*10 == 70) {
 		if (animationCounter == 0) {
 			if (direction.first == "up") {
-				sprite.setTextureRect(sf::IntRect(32, 32, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 32, 32, 32));
 			} else if (direction.first == "down") {
-				sprite.setTextureRect(sf::IntRect(32, 0, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 0, 32, 32));
 			} else if (direction.first == "left") {
-				sprite.setTextureRect(sf::IntRect(32, 96, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 96, 32, 32));
 			} else if (direction.first == "right") {
-				sprite.setTextureRect(sf::IntRect(32, 64, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 64, 32, 32));
 			}
 			animationCounter++;
 		} else if (animationCounter == 1) {
 			if (direction.first == "up") {
-				sprite.setTextureRect(sf::IntRect(0, 32, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(0, 32, 32, 32));
 			} else if (direction.first == "down") {
-				sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(0, 0, 32, 32));
 			} else if (direction.first == "left") {
-				sprite.setTextureRect(sf::IntRect(0, 96, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(0, 96, 32, 32));
 			} else if (direction.first == "right") {
-				sprite.setTextureRect(sf::IntRect(0, 64, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(0, 64, 32, 32));
 			}
 			animationCounter++;
 		} else {
 			if (direction.first == "up") {
-				sprite.setTextureRect(sf::IntRect(32, 32, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 32, 32, 32));
 			} else if (direction.first == "down") {
-				sprite.setTextureRect(sf::IntRect(32, 0, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 0, 32, 32));
 			} else if (direction.first == "left") {
-				sprite.setTextureRect(sf::IntRect(32, 96, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 96, 32, 32));
 			} else if (direction.first == "right") {
-				sprite.setTextureRect(sf::IntRect(32, 64, 32, 32));
+				entity.getSprite().setTextureRect(sf::IntRect(32, 64, 32, 32));
 			}
 			animationCounter = 0;
 		}

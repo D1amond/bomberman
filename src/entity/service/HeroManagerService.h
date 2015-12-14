@@ -4,7 +4,7 @@
 
 #include "../HeroManager.h"
 
-struct HeroManagerService : kgr::SharedService<HeroManager> {
+struct HeroManagerService : kgr::SharedService<HeroManager, kgr::Dependency<kgr::ContainerService>> {
 	using invoke = kgr::Invoke<INVOKE(&HeroManagerService::autocall<METHOD(&HeroManager::init)>)>;
 };
 
