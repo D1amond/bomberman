@@ -11,10 +11,8 @@ MoveReactor::MoveReactor(
 	Entity& entity,
 	Vector2f position
 ) : entity{entity},
-	position{position},
-	timer{},
-	direction{},
-	_collisionManager{collisionManager}
+	_collisionManager{collisionManager},
+	position{position}
 {
 	auto diffX = position.x - entity.getSprite().getPosition().x;
 	auto diffY = position.y - entity.getSprite().getPosition().y;
@@ -41,8 +39,6 @@ MoveReactor::MoveReactor(
 	}
 }
 
-MoveReactor::~MoveReactor() {}
-
 void MoveReactor::finalize()
 {
 	if (direction.first == "up") {
@@ -62,10 +58,6 @@ bool MoveReactor::tick()
 	auto diffX = position.x - entity.getSprite().getPosition().x;
 	auto diffY = position.y - entity.getSprite().getPosition().y;
 	Time elapsed = timer.getElapsedTime();
-	/*
-	if (_collisionManager.collides(entity.getSquare())) {
-		cout << "COLLISION!!!" << endl;
-	}*/
 	
 	if (_collisionManager.hasTile(entity.getSprite().getPosition()+(32.f*direction.second))) {
 		return false;

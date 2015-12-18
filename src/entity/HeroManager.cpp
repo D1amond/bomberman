@@ -8,7 +8,7 @@
 using namespace std;
 using namespace sf;
 
-HeroManager::HeroManager(kgr::Container& container) : hero{}, _container{container} {}
+HeroManager::HeroManager(kgr::Container& container) : _container{container} {}
 
 void HeroManager::init()
 {
@@ -38,36 +38,37 @@ const Sprite& HeroManager::getSprite()
 
 void HeroManager::tick()
 {
-	//cout << (reactor != nullptr? "yes" : "no") << endl;
 	if (reactor != nullptr) {
 		if (!reactor->tick()) {
 			reactor->finalize();
-			delete reactor.release();
+			reactor.reset();
 		}
 	}
 }
 
 void HeroManager::react(Event event)
 {
-	//cout << (reactor == nullptr? "yes" : "no") << endl;
 	if (reactor == nullptr) {
 		if (event.type == Event::KeyPressed) {
-			Vector2f destination;
-			if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S) {
-				destination.y = 1*movefactor;
+			if (event.key.code == sf::Keyboard::X) {
+				
+			} else {
+				Vector2f destination;
+				if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S) {
+					destination.y = 1*movefactor;
+				}
+				if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W) {
+					destination.y = -1*movefactor;
+				}
+				if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D) {
+					destination.x = 1*movefactor;
+				}
+				if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A) {
+					destination.x = -1*movefactor;
+				}
+				destination += hero.getSprite().getPosition();
+				reactor = _container.service<MoveReactorService>(hero, destination);
 			}
-			if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W) {
-				destination.y = -1*movefactor;
-			}
-			if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D) {
-				destination.x = 1*movefactor;
-			}
-			if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A) {
-				destination.x = -1*movefactor;
-			}
-			destination += hero.getSprite().getPosition();
-			reactor = unique_ptr<MoveReactor>{new MoveReactor(_container.service<CollisionManagerService>(), hero, destination)};
-			//reactor = _container.service<MoveReactorService>(hero, destination);
 		}
 	}
 }

@@ -8,7 +8,6 @@
 
 struct MoveReactor : Reactor
 {
-	~MoveReactor();
 	MoveReactor(CollisionManager& collisionManager, Entity& entity, sf::Vector2f position);
 	bool tick() override;
 	void finalize() override;
