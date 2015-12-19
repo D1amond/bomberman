@@ -7,6 +7,8 @@ file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 
 add_executable(bomberman ${SRC_FILES} main.cpp)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}")
+
 find_package(SFML 2 REQUIRED system window graphics network audio)
 target_link_libraries(bomberman ${SFML_LIBRARIES})
 

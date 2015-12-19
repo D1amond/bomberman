@@ -1,0 +1,5 @@
+.directory
+.kdev4/
+bomberman.kdev4
+build/
+include/
