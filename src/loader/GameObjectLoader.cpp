@@ -68,6 +68,39 @@ shared_ptr<GameObject> GameObjectLoader::load(string type)
 		_objectManager.addObject(object);
 		
 		return object;
+	} else if(type == "bomb") {
+		auto texture = make_shared<GameTexture>("res/texture/various/bombs.png");
+		auto gameSprite = make_shared<GameSprite>();
+		auto sprite = make_shared<Sprite>();
+		sprite->setTexture(*texture->getTexture().lock());
+		sprite->setTextureRect(IntRect(32, 0, 32, 32));
+		sprite->setPosition(Vector2f(32.f, 64.f));
+		
+		gameSprite->setSprite(sprite);
+		gameSprite->setTexture(texture);
+		
+		//create and set animations
+		auto animation1 = make_shared<SimpleAnimation>(gameSprite);
+		
+		animation1->addState(IntRect(32, 0, 32, 32));
+		animation1->addState(IntRect(0, 0, 32, 32));
+		animation1->addState(IntRect(32, 0, 32, 32));
+		animation1->addState(IntRect(64, 0, 32, 32));
+		animation1->addState(IntRect(32, 0, 32, 32));
+		
+		gameSprite->addAnimation("Tick", animation1);
+		
+		shared_ptr<GameObject> object = make_shared<GameObject>(type, gameSprite);
+		/*auto moveReactor = make_shared<MoveReactor>(object);
+		for (sf::Event::EventType type : moveReactor->getEventTypes()) {
+			_eventManager.subscribe(type, moveReactor);
+		}*/
+		
+		gameSprite->toggleAnimation("Tick");
+		
+		_objectManager.addObject(object);
+		
+		return object;
 	}
 	return nullptr;
 }

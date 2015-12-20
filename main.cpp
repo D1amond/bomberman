@@ -21,7 +21,8 @@ int main(int argc, char **argv) {
 	sf::RenderWindow window{sf::VideoMode{480, 480}, "Bomberman"};
 	
 	auto _object = loader.load("hero");
-	//gameObjectManager.addObject(_object);
+	auto _object2 = loader.load("bomb");
+
 	while (window.isOpen())
     {
 		auto _eventManager = container.service<EventManagerService>();
