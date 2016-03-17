@@ -3,6 +3,7 @@
 #include "../asset/GameObject.h"
 #include "../asset/GameSprite.h"
 #include "../asset/GameTexture.h"
+#include "../reactor/service/BombReactorService.h"
 #include <src/animation/SimpleAnimation.h>
 #include <src/reactor/MoveReactor.h>
 
@@ -11,8 +12,9 @@ using namespace sf;
 
 GameObjectLoader::GameObjectLoader(
 	EventManager& eventManager,
-	GameObjectManager& objectManager
-) : _eventManager{eventManager}, _objectManager{objectManager} {}
+	GameObjectManager& objectManager,
+	kgr::Container& container
+) : _eventManager{eventManager}, _objectManager{objectManager}, _container{container} {}
 
 shared_ptr<GameObject> GameObjectLoader::load(string type)
 {
@@ -20,7 +22,7 @@ shared_ptr<GameObject> GameObjectLoader::load(string type)
 		auto texture = make_shared<GameTexture>("res/texture/hero/hero.png");
 		auto gameSprite = make_shared<GameSprite>();
 		auto sprite = make_shared<Sprite>();
-		sprite->setTexture(*texture->getTexture().lock());
+		sprite->setTexture(*texture->getTexture());
 		sprite->setTextureRect(IntRect(32, 0, 32, 32));
 		sprite->setPosition(Vector2f(32.f, 32.f));
 		
@@ -64,6 +66,10 @@ shared_ptr<GameObject> GameObjectLoader::load(string type)
 		for (sf::Event::EventType type : moveReactor->getEventTypes()) {
 			_eventManager.subscribe(type, moveReactor);
 		}
+		shared_ptr<BombReactor> bombReactor = _container.service<BombReactorService>(object);
+		for (sf::Event::EventType type : bombReactor->getEventTypes()) {
+			_eventManager.subscribe(type, bombReactor);
+		}
 		
 		_objectManager.addObject(object);
 		
@@ -72,7 +78,7 @@ shared_ptr<GameObject> GameObjectLoader::load(string type)
 		auto texture = make_shared<GameTexture>("res/texture/various/bombs.png");
 		auto gameSprite = make_shared<GameSprite>();
 		auto sprite = make_shared<Sprite>();
-		sprite->setTexture(*texture->getTexture().lock());
+		sprite->setTexture(*texture->getTexture());
 		sprite->setTextureRect(IntRect(32, 0, 32, 32));
 		sprite->setPosition(Vector2f(32.f, 64.f));
 		

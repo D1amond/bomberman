@@ -10,10 +10,10 @@ struct Reactor;
 struct GameObject
 {
 	GameObject(std::string type, std::shared_ptr<GameSprite> gameSprite);
-	std::weak_ptr<GameSprite> getGameSprite();
+	std::shared_ptr<GameSprite> getGameSprite();
 	const std::string getType();
 	const bool hasAction();
-	std::weak_ptr<Action> getAction();
+	std::shared_ptr<Action> getAction();
 	void stopAction();
 	void setAction(std::shared_ptr<Action> action);
 	void addReactor(std::shared_ptr<Reactor> reactor);

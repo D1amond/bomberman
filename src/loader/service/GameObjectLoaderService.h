@@ -6,4 +6,7 @@
 #include <src/event/service/EventManagerService.h>
 #include <src/asset/service/GameObjectManagerService.h>
 
-struct GameObjectLoaderService : kgr::SingleService<GameObjectLoader, kgr::Dependency<EventManagerService, GameObjectManagerService>> {};
+struct GameObjectLoaderService : kgr::SingleService<GameObjectLoader, kgr::Dependency<EventManagerService, GameObjectManagerService, kgr::ContainerService>> {};
+
+template<>
+struct ServiceMap<GameObjectLoader&> : kgr::Map<GameObjectLoaderService> {};

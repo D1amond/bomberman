@@ -7,7 +7,7 @@
 struct GameTexture
 {
 	GameTexture(std::string path);
-	std::weak_ptr<sf::Texture> getTexture();
+	std::shared_ptr<sf::Texture> getTexture();
 private:
 	std::shared_ptr<sf::Texture> _texture;
 };

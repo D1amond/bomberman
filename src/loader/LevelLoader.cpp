@@ -33,7 +33,7 @@ unique_ptr<Level> LevelLoader::load(string name)
 		unique_ptr<Level> level(new Level);
 		level->addLayer(layer);
 		
-		return move(level);
+		return level;
 	}
 	return nullptr;
 }

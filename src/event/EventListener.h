@@ -4,5 +4,6 @@
 
 struct EventListener
 {
+	virtual ~EventListener() = default;
 	virtual void react(sf::Event event) = 0;
 };

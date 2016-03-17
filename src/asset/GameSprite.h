@@ -15,8 +15,8 @@ struct GameSprite
 	void addAnimation(std::string name, std::shared_ptr<Animation> animation);
 	void toggleAnimation(std::string name);
 	void stopAnimation();
-	std::weak_ptr<Animation> getCurrentAnimation();
-	std::weak_ptr<sf::Sprite> getSprite();
+	std::shared_ptr<Animation> getCurrentAnimation();
+	std::shared_ptr<sf::Sprite> getSprite();
 private:
 	std::shared_ptr<sf::Sprite> _sprite;
 	std::shared_ptr<GameTexture> _texture;

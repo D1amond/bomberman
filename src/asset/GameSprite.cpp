@@ -7,7 +7,7 @@ using namespace sf;
 
 GameSprite::GameSprite() {}
 
-weak_ptr<Sprite> GameSprite::getSprite()
+shared_ptr<Sprite> GameSprite::getSprite()
 {
 	return _sprite;
 }
@@ -22,7 +22,7 @@ void GameSprite::setTexture(shared_ptr<GameTexture> texture)
 	_texture = texture;
 }
 
-weak_ptr<Animation> GameSprite::getCurrentAnimation()
+shared_ptr<Animation> GameSprite::getCurrentAnimation()
 {
 	return _currentAnimation;
 }

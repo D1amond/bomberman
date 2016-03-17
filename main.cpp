@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
 	sf::RenderWindow window{sf::VideoMode{480, 480}, "Bomberman"};
 	
 	auto object = loader.load("hero");
-	auto object2 = loader.load("bomb");
+	//auto object2 = loader.load("bomb");
 	
 	levelManager.goTo("level1");
 
@@ -50,10 +50,10 @@ int main(int argc, char **argv) {
 		}
 
 		for (shared_ptr<GameObject> object : gameObjectManager.getObjects()) {
-			if (!object->getGameSprite().expired()) {
-				auto gameSprite = object->getGameSprite().lock();
-				if (!gameSprite->getSprite().expired()) {
-					auto sprite = gameSprite->getSprite().lock();
+			if (object->getGameSprite()) {
+				auto gameSprite = object->getGameSprite();
+				if (gameSprite->getSprite()) {
+					auto sprite = gameSprite->getSprite();
 					window.draw(*sprite);
 				}
 			}

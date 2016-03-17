@@ -2,6 +2,7 @@
 
 #include "GameSprite.h"
 #include "../reactor/Reactor.h"
+#include <iostream>
 
 using namespace std;
 using namespace sf;
@@ -13,7 +14,7 @@ void GameObject::addReactor(shared_ptr<Reactor> reactor)
 	_reactors.push_back(reactor);
 }
 
-weak_ptr< GameSprite > GameObject::getGameSprite()
+shared_ptr< GameSprite > GameObject::getGameSprite()
 {
 	return _gameSprite;
 }
@@ -33,7 +34,7 @@ void GameObject::stopAction()
 	_action = nullptr;
 }
 
-weak_ptr<Action> GameObject::getAction()
+shared_ptr<Action> GameObject::getAction()
 {
 	return _action;
 }

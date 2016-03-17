@@ -15,7 +15,7 @@ GameTexture::GameTexture(string path)
 	}
 }
 
-weak_ptr<Texture> GameTexture::getTexture()
+shared_ptr<Texture> GameTexture::getTexture()
 {
 	return _texture;
 }

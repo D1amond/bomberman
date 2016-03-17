@@ -16,18 +16,16 @@ bool SimpleAnimation::run()
 	if (((elapsed.asMilliseconds() - _lastTime.asMilliseconds())/10)*10 >= 70) {
 		if (!_sprite.expired()) {
 			auto gameSprite = _sprite.lock();
-			if (!gameSprite->getSprite().expired()) {
-				_lastTime = elapsed;
-				auto sprite = gameSprite->getSprite().lock();
-				sprite->setTextureRect(_states.at(last-1));
-				if (last == _states.size()) {
-					last = 1;
-					return false;
-				} else {
-					last++;
-				}
-				return true;
+			_lastTime = elapsed;
+			auto sprite = gameSprite->getSprite();
+			sprite->setTextureRect(_states.at(last-1));
+			if (last == _states.size()) {
+				last = 1;
+				return false;
+			} else {
+				last++;
 			}
+			return true;
 		}
 		return false;
 	}
@@ -38,10 +36,8 @@ void SimpleAnimation::finalize()
 {
 	if (!_sprite.expired()) {
 		auto gameSprite = _sprite.lock();
-		if (!gameSprite->getSprite().expired()) {
-			auto sprite = gameSprite->getSprite().lock();
-			sprite->setTextureRect(_states.at(last-1));
-		}
+		auto sprite = gameSprite->getSprite();
+		sprite->setTextureRect(_states.at(last-1));
 	}
 }
 
