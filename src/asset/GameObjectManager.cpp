@@ -6,13 +6,7 @@ using namespace std;
 
 void GameObjectManager::tick()
 {
-	/*
-	 * TODO not copy the list!
-	 * Required here because GameObjects can be added to the list while iterating, invalidating iterators.
-	 */
-	auto objects = _objects;
-	
-	for (auto&& object : objects) {
+	for (auto&& object : _objects) {
 		if (object) {
 			if (object->hasAction()) {
 				auto action = object->getAction();
@@ -33,11 +27,19 @@ void GameObjectManager::tick()
 			}
 		}
 	}
+	
+	update();
+}
+
+void GameObjectManager::update()
+{
+	_objects.insert(end(_objects), begin(_newObjects), end(_newObjects));
+	_newObjects.clear();
 }
 
 void GameObjectManager::addObject(std::shared_ptr<GameObject> object)
 {
-	_objects.push_back(object);
+	_newObjects.push_back(object);
 }
 
 const vector<shared_ptr<GameObject>>& GameObjectManager::getObjects()
