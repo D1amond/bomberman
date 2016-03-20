@@ -6,7 +6,7 @@
 using namespace std;
 using namespace sf;
 
-SimpleAnimation::SimpleAnimation(weak_ptr<GameSprite> sprite) : _sprite{sprite} {
+SimpleAnimation::SimpleAnimation(weak_ptr<GameSprite> sprite) : _sprite{sprite}, _finished{false} {
 	_lastTime = _clock.getElapsedTime();
 }
 
@@ -21,15 +21,12 @@ bool SimpleAnimation::run()
 			sprite->setTextureRect(_states.at(last-1));
 			if (last == _states.size()) {
 				last = 1;
-				return false;
 			} else {
 				last++;
 			}
-			return true;
 		}
-		return false;
 	}
-	return true;
+	return !_finished;
 }
 
 void SimpleAnimation::finalize()
@@ -38,6 +35,7 @@ void SimpleAnimation::finalize()
 		auto gameSprite = _sprite.lock();
 		auto sprite = gameSprite->getSprite();
 		sprite->setTextureRect(_states.at(last-1));
+		_finished = true;
 	}
 }
 

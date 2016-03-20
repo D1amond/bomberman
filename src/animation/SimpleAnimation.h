@@ -19,4 +19,5 @@ private:
 	std::size_t last{1};
 	sf::Clock _clock;
 	sf::Time _lastTime;
+	bool _finished;
 };

@@ -8,6 +8,7 @@ struct Action
 {
 	Action(std::weak_ptr<GameObject> gameObject);
 	virtual ~Action() = default;
+	virtual std::string getType() = 0;
 	virtual bool execute() = 0;
 protected:
 	std::weak_ptr<GameObject> _gameObject;

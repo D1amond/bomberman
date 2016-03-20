@@ -12,6 +12,11 @@ BombAction::BombAction(
 	Vector2f position
 ): Action(gameObject), _gameObjectLoader{gameObjectLoader}, _position{position} {}
 
+string BombAction::getType()
+{
+	return "bomb";
+}
+
 bool BombAction::execute()
 {
 	auto bomb = _gameObjectLoader.load("bomb");
