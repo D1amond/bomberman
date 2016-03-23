@@ -80,6 +80,6 @@ void MoveReactor::keyReleased(shared_ptr<GameObject> object, Keyboard::Key key)
 		}
 		_lastAction = nullptr;
 	} else {
-		keyPressed(object, _keysPressed.front());
+		keyPressed(object, _keysPressed.back());
 	}
 }
