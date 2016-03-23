@@ -8,7 +8,28 @@
 using namespace std;
 using namespace sf;
 
-MoveReactor::MoveReactor(shared_ptr<GameObject> gameObject): Reactor(gameObject) {}
+MoveReactor::MoveReactor(shared_ptr<GameObject> gameObject): Reactor(gameObject), _lastAction{nullptr} {
+	float factor = 0.006;
+	
+	_positions.emplace(sf::Keyboard::Down, Vector2f{0, 1*factor});
+	_positions.emplace(sf::Keyboard::S, Vector2f{0, 1*factor});
+	_positions.emplace(sf::Keyboard::Up, Vector2f{0, -1*factor});
+	_positions.emplace(sf::Keyboard::W, Vector2f{0, -1*factor});
+	_positions.emplace(sf::Keyboard::Right, Vector2f{1*factor, 0});
+	_positions.emplace(sf::Keyboard::D, Vector2f{1*factor, 0});
+	_positions.emplace(sf::Keyboard::Left, Vector2f{-1*factor, 0});
+	_positions.emplace(sf::Keyboard::A, Vector2f{-1*factor, 0});
+	
+	_directions.emplace(sf::Keyboard::Down, "down");
+	_directions.emplace(sf::Keyboard::S, "down");
+	_directions.emplace(sf::Keyboard::Up, "up");
+	_directions.emplace(sf::Keyboard::W, "up");
+	_directions.emplace(sf::Keyboard::Right, "right");
+	_directions.emplace(sf::Keyboard::D, "right");
+	_directions.emplace(sf::Keyboard::Left, "left");
+	_directions.emplace(sf::Keyboard::A, "left");
+	
+}
 
 vector<Event::EventType> MoveReactor::getEventTypes()
 {
@@ -23,42 +44,42 @@ void MoveReactor::react(Event event)
 {
 	if (!_gameObject.expired()) {
 		auto object = _gameObject.lock();
-		if (event.type == Event::EventType::KeyPressed && !object->hasAction()) {
-			keyPressed(object, event);
-		} else if (event.type == Event::EventType::KeyReleased && object->hasAction() && object->getAction()->getType() == "move") {
-			keyReleased(object, event);
+		if (_directions.find(event.key.code) != _directions.end()) {
+			if (event.type == Event::EventType::KeyPressed && (!object->hasAction() || object->getAction()->getType() == "move")) {
+				keyPressed(object, event.key.code);
+			} else if (event.type == Event::EventType::KeyReleased && object->hasAction() && object->getAction()->getType() == "move") {
+				keyReleased(object, event.key.code);
+			}
 		}
 	}
 }
 
-void MoveReactor::keyPressed(shared_ptr<GameObject> object, Event event)
+void MoveReactor::keyPressed(shared_ptr<GameObject> object, Keyboard::Key key)
 {
-	Vector2f destination;
+	Vector2f position = _positions.at(key);
+	string direction = _directions.at(key);
 	
-	float factor = 0.006;
-	
-	if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S) {
-		destination.y = 1*factor;
-	}
-	if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W) {
-		destination.y = -1*factor;
-	}
-	if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D) {
-		destination.x = 1*factor;
-	}
-	if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A) {
-		destination.x = -1*factor;
-	}
-	if (destination.x != 0 || destination.y != 0) {
-		auto action = make_shared<MoveAction>(object, destination);
+	if (!_lastAction || _lastAction->getDirection() != direction) {
+			
+		_keysPressed.push_back(key);
+		auto action = make_shared<MoveAction>(object, position, direction);
 		object->setAction(action);
+		_lastAction = action;
 	}
 }
 
-void MoveReactor::keyReleased(shared_ptr<GameObject> object, Event event)
+void MoveReactor::keyReleased(shared_ptr<GameObject> object, Keyboard::Key key)
 {
-	object->stopAction();
-	if (object->getGameSprite()->getCurrentAnimation()) {
-		object->getGameSprite()->stopAnimation();
+	string direction = _directions.at(key);
+	_keysPressed.erase(remove(_keysPressed.begin(), _keysPressed.end(), key), _keysPressed.end());
+	
+	if (_keysPressed.size() == 0) {
+		object->stopAction();
+		if (object->getGameSprite()->getCurrentAnimation()) {
+			object->getGameSprite()->stopAnimation();
+		}
+		_lastAction = nullptr;
+	} else {
+		keyPressed(object, _keysPressed.front());
 	}
 }

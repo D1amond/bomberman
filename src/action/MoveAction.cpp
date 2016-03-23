@@ -5,11 +5,16 @@
 using namespace std;
 using namespace sf;
 
-MoveAction::MoveAction(weak_ptr<GameObject> gameObject, Vector2f position): Action(gameObject), _position{position} {}
+MoveAction::MoveAction(weak_ptr<GameObject> gameObject, Vector2f position, string direction): Action(gameObject), _position{position}, _direction{direction} {}
 
 string MoveAction::getType()
 {
 	return "move";
+}
+
+string MoveAction::getDirection()
+{
+	return _direction;
 }
 
 bool MoveAction::execute()
@@ -32,13 +37,13 @@ void MoveAction::animate(shared_ptr<GameObject> object)
 {
 	auto gameSprite = object->getGameSprite();
 	
-	if (_position.x > 0 && _position.y == 0) {
+	if (_direction == "right") {
 		gameSprite->toggleAnimation("MoveRight");
-	} else if (_position.x < 0 && _position.y == 0) {
+	} else if (_direction == "left") {
 		gameSprite->toggleAnimation("MoveLeft");
-	} if (_position.x == 0 && _position.y > 0) {
+	} if (_direction == "down") {
 		gameSprite->toggleAnimation("MoveDown");
-	} if (_position.x == 0 && _position.y < 0) {
+	} if (_direction == "up") {
 		gameSprite->toggleAnimation("MoveUp");
 	}
 }
